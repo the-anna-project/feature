@@ -3,6 +3,8 @@ package feature
 import (
 	"strings"
 	"sync"
+
+	"github.com/the-anna-project/context"
 )
 
 // ServiceConfig represents the configuration used to create a new service.
@@ -40,7 +42,7 @@ func (s *service) Boot() {
 	})
 }
 
-func (s *service) Scan(config ScanConfig) ([]Feature, error) {
+func (s *service) Scan(ctx context.Context, config ScanConfig) ([]Feature, error) {
 	// Validate.
 	err := config.Validate()
 	if err != nil {

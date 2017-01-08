@@ -1,5 +1,9 @@
 package feature
 
+import (
+	"github.com/the-anna-project/context"
+)
+
 // Feature represents a charactistic within a sequence. During pattern
 // recognition it is tried to detect features. Their distributions describe
 // location patterns within space.
@@ -63,7 +67,7 @@ type Service interface {
 	Boot()
 	// Scan analyses the given sequences to detect patterns. Found patterns are
 	// returned in form of a list of features.
-	Scan(config ScanConfig) ([]Feature, error)
+	Scan(ctx context.Context, config ScanConfig) ([]Feature, error)
 	// ScanConfig returns a default scan config configured by best effort.
 	ScanConfig() ScanConfig
 	// Shutdown ends all processes of the service like shutting down a machine.

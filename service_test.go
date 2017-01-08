@@ -4,10 +4,17 @@ import (
 	"reflect"
 	"sort"
 	"testing"
+
+	"github.com/the-anna-project/context"
 )
 
 func Test_Service_Scan(t *testing.T) {
 	newService, err := NewService(DefaultServiceConfig())
+	if err != nil {
+		t.Fatal("expected", nil, "got", err)
+	}
+
+	ctx, err := context.New(context.DefaultConfig())
 	if err != nil {
 		t.Fatal("expected", nil, "got", err)
 	}
@@ -19,7 +26,7 @@ func Test_Service_Scan(t *testing.T) {
 		"This is, another test.",
 	})
 
-	features, err := newService.Scan(scanConfig)
+	features, err := newService.Scan(ctx, scanConfig)
 	if err != nil {
 		t.Fatal("expected", nil, "got", err)
 	}
@@ -147,13 +154,18 @@ func Test_Service_Scan_MinLengthMaxLength(t *testing.T) {
 			t.Fatal("expected", nil, "got", err)
 		}
 
+		ctx, err := context.New(context.DefaultConfig())
+		if err != nil {
+			t.Fatal("expected", nil, "got", err)
+		}
+
 		scanConfig := newService.ScanConfig()
 		scanConfig.SetMinCount(2)
 		scanConfig.SetMaxLength(testCase.MaxLength)
 		scanConfig.SetMinLength(testCase.MinLength)
 		scanConfig.SetSequences(testCase.Sequences)
 
-		features, err := newService.Scan(scanConfig)
+		features, err := newService.Scan(ctx, scanConfig)
 		if (err != nil && testCase.ErrorMatcher == nil) || (testCase.ErrorMatcher != nil && !testCase.ErrorMatcher(err)) {
 			t.Fatal("case", i+1, "expected", true, "got", false)
 		}
